@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+
+    <node name="human_commander" pkg="spco2_mlda" type="ancestral_sampling_object2place.py" output="screen" cwd="node" />
+
+</launch>
