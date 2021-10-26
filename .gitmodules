@@ -1,0 +1,4 @@
+[submodule "mlda"]
+	path = mlda
+	url = https://github.com/Shoichi-Hasegawa0628/mlda.git
+	branch = devel
