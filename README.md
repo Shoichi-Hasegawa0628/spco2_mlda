@@ -1,6 +1,7 @@
 # spco2_mlda
-This repository is spatial concepts library.  
-Mainly, it is a program that executes [SpCoSLAM](https://github.com/a-taniguchi/SpCoSLAM2) in the gazebo environment.
+This repository is SpCoSLAM-MLDA package.  
+SpCoSLAM-MLDA learns the relationship between object and place.  
+Mainly, it is a program that executes [SpCoSLAM](https://github.com/a-taniguchi/SpCoSLAM2) in Gazebo.
 
 *   Maintainer: Shoichi Hasegawa ([hasegawa.shoichi@em.ci.ritsumei.ac.jp](mailto:hasegawa.shoichi@em.ci.ritsumei.ac.jp)).
 *   Author: Shoichi Hasegawa ([hasegawa.shoichi@em.ci.ritsumei.ac.jp](mailto:hasegawa.shoichi@em.ci.ritsumei.ac.jp)).
@@ -18,36 +19,47 @@ You can do it like this below image.
 * [Reference](#reference)
 * [Acknowledgements](#acknowledgements)
 
+
 ## Execution environment  
 - Ubuntu：20.04LTS
 - ROS：Noetic
 - Python：3.8.10
 - C++：14
+- Robot：Human Support Robot (HSR)
 
 
 ## Execution Procedure
-1. Launch Gazebo
-2. Launch Rviz
-3. `rosnode kill /pose_integrator` 
-4. `roscd rgiro_spco2_slam`
-5. `cd bash`
-6. `bash reset-spco2-slam-output.bash`
-7. `roslaunch rgiro_spco2_slam spco2_slam.launch`
-8. `roslaunch rgiro_spco2_slam spco2_word.launch`
+1. `cd HSR/catkin_ws` 
+2. `catkin_make` 
+3. Execute [MLDA](https://github.com/Shoichi-Hasegawa0628/mlda/tree/devel)
+4. Launch Gazebo
+5. Launch Rviz
+6. `rosnode kill /pose_integrator` 
+7. `roscd rgiro_spco2_slam`
+8. `cd bash`
+9. `bash reset-spco2-slam-output.bash`
+10. `roslaunch rgiro_spco2_slam spco2_slam.launch`
+11. `roslaunch rgiro_spco2_slam spco2_word.launch`
 
-Teaching the place name while teleoping with rqt.
+Teaching the place name while teleoping with `rqt`.  
+If you want to use cross modal inference which infer from object word to place word,  
+you can use `ancestral_sampling_object2place.py`.
 
 
-## Folder  
+## Folder
+- `mlda`：Object categorization method (MLDA (Multimodal LDA))
 - `rgiro_openslam_gmapping`：SpCoSLAM Wrapper of FastSLAM2.0 published on [OpenSLAM](https://openslam-org.github.io/)
 - `rgiro_slam_gmapping`：SpCoSLAM Wrapper of slam_gmapping ros package (ros wrapper of openslam_gmapping)
 - `rgiro_spco2_slam`：Main codes of SpCoSLAM
 - `rgiro_spco2_visualization`：Visualization codes of learning spatial concepts
+- `spco2_mlda`：
+
 
 ## To Do (Japanese)
-- slam_gmappingとopenslam_gmappingの改変部分を外部のプログラムで構築
-- 絶対パスを無くす
-- 要らないコメントアウトなどを消す
-- ハイパーパラメータなどはyamlファイルへ
+- パラメータの追加学習には未対応
+- 絶対パスが含まれている箇所があるため、変更が必要な場合あり
+
 
 ## Reference
+- [SpCoSLAM 2.0](https://github.com/a-taniguchi/SpCoSLAM2)
+- [MLDA](https://github.com/Shoichi-Hasegawa0628/mlda/tree/devel)
