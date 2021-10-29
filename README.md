@@ -29,20 +29,20 @@ You can do it like this below image.
 
 
 ## Execution Procedure
-1  `cd HSR/catkin_ws/src`
-2. `git clone https://github.com/Shoichi-Hasegawa0628/spco2_mlda.git`
-3. `cd ~/HSR/ && bash ./RUN-DOCKER-CONTAINER.bash` 
-4. `cd catkin_ws` 
-5. `catkin_make` 
-6. Execute [MLDA](https://github.com/Shoichi-Hasegawa0628/mlda/tree/devel)
-7. Launch Gazebo
-8. Launch Rviz
-9. `rosnode kill /pose_integrator` 
-10. `roscd rgiro_spco2_slam`
-11. `cd bash`
-12. `bash reset-spco2-slam-output.bash`
-13. `roslaunch rgiro_spco2_slam spco2_slam.launch`
-14. `roslaunch rgiro_spco2_slam spco2_word.launch`
+1  `cd HSR/catkin_ws/src`  
+2. `git clone https://github.com/Shoichi-Hasegawa0628/spco2_mlda.git`  
+3. `cd ~/HSR/ && bash ./RUN-DOCKER-CONTAINER.bash`  
+4. `cd catkin_ws`  
+5. `catkin_make`  
+6. Execute [MLDA](https://github.com/Shoichi-Hasegawa0628/mlda/tree/devel)  
+7. Launch Gazebo  
+8. Launch Rviz  
+9. `rosnode kill /pose_integrator`   
+10. `roscd rgiro_spco2_slam`  
+11. `cd bash`  
+12. `bash reset-spco2-slam-output.bash`  
+13. `roslaunch rgiro_spco2_slam spco2_slam.launch`  
+14. `roslaunch rgiro_spco2_slam spco2_word.launch`  
 
 Teaching the place name while teleoping with `rqt`.  
 If you want to use cross modal inference which infer from object word to place word,  
