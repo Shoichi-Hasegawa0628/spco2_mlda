@@ -36,6 +36,14 @@ class AncestralSamplingObject2Place():
         result = []
         cat_ws_list = []
         samples = 10
+
+        # 場所の単語一覧をロード
+        with open(SPCO_PARAM_PATH + 'W_list.csv') as f:
+            reader = csv.reader(f)
+            for row in reader:
+                pass
+            place_name_list = row
+
         for name in range(len(target_name)):
             #target_name = "pig"
             
@@ -62,7 +70,7 @@ class AncestralSamplingObject2Place():
                 #object_dic = 71
                 #wo_t_1_k = np.identity(object_dic)
                 theta_ow_data = np.loadtxt(MLDA_PARAM_PATH + 'learn_result/Pdw[1].txt')
-                with open('processing_data/bow/learn/word_dic.txt', 'r') as f:
+                with open(MLDA_PARAM_PATH  + 'processing_data/bow/learn/word_dic.txt', 'r') as f:
                     obj_name_list = f.read().split("\n")
                 cat_wo = theta_ow_data[obj_name_list.index(target_name[name]), co_idx_pre]
                 co = cat_co_v1 * cat_wo
@@ -112,7 +120,7 @@ class AncestralSamplingObject2Place():
 
                 # (w^s)_tのサンプリング
                 # P((w^s)_t | (C^s)_t, theta_sw) (カテゴリ分布)
-                place_dic = 4
+                place_dic = len(place_name_list)
                 ws_t_k = np.identity(place_dic)
                 theta_sw = []
                 with open(SPCO_PARAM_PATH + 'W.csv') as f:
@@ -127,12 +135,13 @@ class AncestralSamplingObject2Place():
             result.append(sub_result)
             cat_ws_list = []
         final_result = (sum(result)) / len(target_name) # pig_doll, pig, doll分の確率を平均化
-        #print(final_result)
+
+        print(place_name_list)
+        print(final_result)
         return final_result
 
-
 if __name__ == "__main__":
-    rospy.init_node('ancestral_sampling_object2place')
+    #rospy.init_node('ancestral_sampling_object2place')
     object2place = AncestralSamplingObject2Place()
     object2place.word_callback()
     #rospy.spin()
