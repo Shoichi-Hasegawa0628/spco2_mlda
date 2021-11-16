@@ -30,9 +30,9 @@ You can do it like this below image.
 
 ## Execution Procedure
 1  `cd HSR/catkin_ws/src`  
-2. `git clone https://github.com/Shoichi-Hasegawa0628/spco2_mlda.git` 
-3. `cd spco2_mlda/mlda`
-4. `git submodule update --init --recursive`
+2. `git clone https://github.com/Shoichi-Hasegawa0628/spco2_mlda.git`  
+3. `cd spco2_mlda/mlda`  
+4. `git submodule update --init --recursive`  
 5. `cd ~/HSR/ && bash ./RUN-DOCKER-CONTAINER.bash`  
 6. `cd catkin_ws`  
 7. `catkin_make`  
