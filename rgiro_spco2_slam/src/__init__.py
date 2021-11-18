@@ -2,6 +2,7 @@
 #This file for setting parameters
 #Akira Taniguchi 2017/01/18-2018/02/11-2018/12/22- 
 import numpy as np
+import roslib.packages
 
 ####################Parameters####################
 R = 30               #The number of particles in spatial concept learning (Same to value in run_gmapping.sh)
@@ -63,6 +64,7 @@ elif CNNmode == 5:
 #パスはUbuntu使用時とWin使用時で変更する必要がある。特にUbuntuで動かすときは絶対パスになっているか要確認。
 #win:相対パス、ubuntu:絶対パス
 datafolder   = "/root/HSR/catkin_ws/src/spco2_mlda/rgiro_spco2_slam/data/output/"        #PATH of data out put folder
+OBJECT_CATEGORY_PATH = str(roslib.packages.get_pkg_dir("mlda")) + "/scripts/co_frequency.csv"
 
 ####################Particle Class (structure)####################
 class Particle:

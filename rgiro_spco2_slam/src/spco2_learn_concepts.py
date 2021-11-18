@@ -126,25 +126,23 @@ def ReadObjectTopic(object_path):
                       break
   print("object_topic: ", object_topic)
   return object_topic
+"""
 
+OT = []
 
-# Reading data for MLDA topic frequency, 一行づつcsvデータを読み込んでリスト型に格納していく関数
-# モダリティは区別しない
-def ReadObjectTopic(object_path):
-  D = 9
-  object_topic = [None for d in range(D)]
+# Reading data for object category frequency, 一行づつcsvデータを読み込んでリスト型に格納していく関数
+# 物体の単語と画像の割当て回数を合算したものを格納
+def ReadObjectCategoryFrequency():
+  object_topic = []
+  with open(OBJECT_CATEGORY_PATH) as f:
+    for row in csv.reader(f):
+      if row is not None:
+        object_topic = row
+        break
 
-  with open(object_path) as f:
-    for d in range(D):
-      for row in csv.reader(f):
-        if row is not None:
-          object_topic[d] = row
-          break
-
-  object_topic = [[float(item) for item in row] for row in object_topic]
   print("object_topic: ", object_topic)
   return object_topic
-"""
+
 
 # Reading data for image feature (NOT USE)
 def ReadImageData(trialname, step):
@@ -498,6 +496,7 @@ def Learning(step, filename, particle, XT, ST, W_list, CT, IT, FT, OT):
     ##sampling ct and it
     print (u"Sampling Ct,it...")
     cstep = step - 1
+    print("cstep: {}".format(cstep))
     #k0m0m0 = k0*np.dot(np.array([m0]).T,np.array([m0]))
     G = len(W_list)
     E = DimImg
@@ -636,9 +635,9 @@ def Learning(step, filename, particle, XT, ST, W_list, CT, IT, FT, OT):
             Ft_prob[l] = np.exp(sum(np.array(theta_temp_log) * np.array(FT[cstep]))) #.prod() #要素積
 
             ##物体概念の頻度情報のカウント数の計算
-            Nld = sum([np.array(OT[0])*(CT[s]==ccitems[l][0]) for s in range(step-1)])  #sumだとできる
+            Nld = sum([np.array(OT[s])*(CT[s]==ccitems[l][0]) for s in range(step-1)])  #sumだとできる
             Xi_temp_log = np.log(np.array(Nld) + lamb ) - np.log(sum(Nld) + D*lamb)
-            Ot_prob[l] = np.exp(sum(np.array(Xi_temp_log) * np.array(OT[0]))) #.prod() #要素積
+            Ot_prob[l] = np.exp(sum(np.array(Xi_temp_log) * np.array(OT[cstep]))) #.prod() #要素積
 
           else:  #ct=lかつit=kのデータがない場合
             St_prob[l] = 1.0/(G**Bt)
@@ -812,9 +811,9 @@ def Learning(step, filename, particle, XT, ST, W_list, CT, IT, FT, OT):
                   Ft_prob[l] = np.exp(sum(np.array(theta_temp_log) * np.array(FT[tau]))) #.prod() #要素積
 
                   ##物体概念の頻度情報のカウント数の計算
-                  Nld = sum([np.array(OT[0])*(CT[s]==ccitems[l][0]) for s in range(step-1)])  #sumだとできる
+                  Nld = sum([np.array(OT[s])*(CT[s]==ccitems[l][0]) for s in range(step-1)])  #sumだとできる
                   Xi_temp_log = np.log(np.array(Nld) + lamb ) - np.log(sum(Nld) + D*lamb)
-                  Ot_prob[l] = np.exp(sum(np.array(Xi_temp_log) * np.array(OT[0]))) #.prod() #要素積
+                  Ot_prob[l] = np.exp(sum(np.array(Xi_temp_log) * np.array(OT[tau]))) #.prod() #要素積
 
                 else:  #ct=lかつit=kのデータがない場合
                   St_prob[l] = 1.0/(G**Bt)
@@ -911,7 +910,7 @@ def Learning(step, filename, particle, XT, ST, W_list, CT, IT, FT, OT):
       theta = [(np.array(Nle_c[c]) + chi0 ) / (sum(Nle_c[c]) + E*chi0) for c in range(Lp)] # [thetac_temp[c] for c in xrange(Lp)]
       
       #Cの場所概念にOtのカウントを足す
-      Nld_c = [sum([np.array(OT[0])*(CT[s]==ccitems[c][0]) for s in range(step)]) for c in range(Lp)]
+      Nld_c = [sum([np.array(OT[s])*(CT[s]==ccitems[c][0]) for s in range(step)]) for c in range(Lp)]
       #thetac_temp = [(np.array(Nle_c[c]) + chi0 ) / (sum(Nle_c[c]) + E*chi0) for c in xrange(Lp)]
       Xi = [(np.array(Nld_c[c]) + lamb ) / (sum(Nld_c[c]) + D*lamb) for c in range(Lp)] # [thetac_temp[c] for c in xrange(Lp)]
 
@@ -1065,7 +1064,13 @@ def callback(message):
     p_WS_log = np.array([0.0 for i in range(R)]) ###
     W_list   = [[] for i in range(R)]
     ST_seq   = [[] for i in range(R)]
-    OT = np.zeros([1, 3])
+    #ot = [0,0,0]
+    #OT = np.array(ReadObjectCategoryFrequency())
+    #OT = OT.astype(np.int)
+    ot = [random.randint(0, 10) for i in range(3)]
+    OT.append(ot)
+    print("OT: {}".format(OT))
+
 
     if (UseFT == 1):
       FT = ReadImageData(trialname, step)
