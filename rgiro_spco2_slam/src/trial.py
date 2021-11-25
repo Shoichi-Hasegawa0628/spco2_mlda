@@ -42,7 +42,7 @@ for s in range(step):
         itemList = line[:].split(',')
         FT.append( [float(itemList[i]) for i in range(DimImg)] )
 print("FT: {}".format(FT))
-print(type(FT[0][0]))
+print(type(FT[0]))
 Nle_c = [ sum( [np.array(FT[0])] ) ]
 print(Nle_c)
 theta = [(np.array(Nle_c[0]) + chi0 ) / (sum(Nle_c[0]) + E*chi0)]

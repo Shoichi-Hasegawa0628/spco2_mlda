@@ -59,6 +59,7 @@ class AncestralSamplingObject2Place():
                 # (C^o)_tのサンプリング式
                 # P((C^o)_(t,1) | (w^o)_(t,1), θ^(o,w), (π^o)_1) ∝ P( (C^o)_(t,1) | (π^o)_1 ) P( (w^o)_(t,1) | (C^o)_(t,1), θ^(o,w))
                 ## P( (C^o)_(t,1) | (π^o)_1 ) (カテゴリ分布)
+
                 objct_topic_num = 3
                 object_topic = np.arange(objct_topic_num)
                 co_t_1_k = np.identity(objct_topic_num)

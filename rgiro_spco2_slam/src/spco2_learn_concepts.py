@@ -109,6 +109,11 @@ import sys
 import os.path
 import time
 import shutil
+import sys
+import roslib.packages
+sys.path.append(str(roslib.packages.get_pkg_dir("spco2_mlda")) + "/src")
+import object_recognition_yolo2mlda
+yolo2mlda_func = object_recognition_yolo2mlda.ObjectRecognitionYOLO2MLDA()
 
 """
 # Reading data for MLDA topic frequency, 一行づつcsvデータを読み込んでリスト型に格納していく関数
@@ -132,13 +137,18 @@ OT = []
 
 # Reading data for object category frequency, 一行づつcsvデータを読み込んでリスト型に格納していく関数
 # 物体の単語と画像の割当て回数を合算したものを格納
-def ReadObjectCategoryFrequency():
+def ReadObjectCategoryFrequency(step):
   object_topic = []
-  with open(OBJECT_CATEGORY_PATH) as f:
-    for row in csv.reader(f):
-      if row is not None:
-        object_topic = row
-        break
+  for s in range(step):
+  # with open(OBJECT_CATEGORY_PATH) as f:
+  #   for row in csv.reader(f):
+  #     if row is not None:
+  #       object_topic = row
+  #       break
+    for line in open(OBJECT_CATEGORY_PATH):
+      # for line in open( datasetfolder + datasetname + 'img/ft' + str(s+1) + '.csv', 'r'):
+      itemList = line[:].split(',')
+      object_topic.append([float(itemList[i]) for i in range(3)])
 
   print("object_topic: ", object_topic)
   return object_topic
@@ -1064,12 +1074,27 @@ def callback(message):
     p_WS_log = np.array([0.0 for i in range(R)]) ###
     W_list   = [[] for i in range(R)]
     ST_seq   = [[] for i in range(R)]
+
+    ###########################修正中
+    flag = yolo2mlda_func.selection_mode(mode = "0")
+
+    if flag == 0:
+      OT = [[0, 0, 0]]
+      #OT.append(ot)
+    else:
+      OT = ReadObjectCategoryFrequency(step)
+      #for i in range(len(OT)):
+      #  OT[i] = int(OT[i])
+
+    print("OT: {}".format(OT))
     #ot = [0,0,0]
     #OT = np.array(ReadObjectCategoryFrequency())
     #OT = OT.astype(np.int)
-    ot = [random.randint(0, 10) for i in range(3)]
-    OT.append(ot)
-    print("OT: {}".format(OT))
+
+    #ot = [random.randint(0, 10) for i in range(3)]
+    #OT.append(ot)
+    #print("OT: {}".format(OT))
+    ###########################
 
 
     if (UseFT == 1):
