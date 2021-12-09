@@ -1,5 +1,6 @@
 sensor_msgs/CompressedImage observed_img
 int32 count
 string mode
+int32 step
 ---
 bool success

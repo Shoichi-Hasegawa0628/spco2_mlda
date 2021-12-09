@@ -35,7 +35,7 @@ class CropImg():
         print('clear')
         try:
             # bb = rospy.wait_for_message('/darknet_ros/bounding_boxes', BoundingBoxes, timeout=10)
-            bb = rospy.wait_for_message('/yolov5_ros/output/bounding_boxes', BoundingBoxes, timeout=None)
+            bb = rospy.wait_for_message('/yolov5_ros/output/bounding_boxes', BoundingBoxes, timeout=15)
         except:
 
             return SendImageYOLOResponse(success=False)
@@ -54,6 +54,8 @@ class CropImg():
         else:
             # img = rospy.wait_for_message('/darknet_ros/detection_image', Image, timeout=15)
             img = rospy.wait_for_message('/yolov5_ros/output/image/compressed', CompressedImage, timeout=15)
+            if img == 0:
+                return SendImageYOLOResponse(success=False)
             img = self.cv_bridge.compressed_imgmsg_to_cv2(img)
         self.detect_pre_img = img
 
@@ -93,38 +95,46 @@ class CropImg():
                 crop_img_resize = cv2.resize(crop_img, (int(width_cut) * 2, int(height_cut) * 2))  # 2倍にする
                 print("Saving preparation...")
                 if msg.mode == "0":
-                    if os.path.exists(PRE_CROP + "{}".format(img_num)) is True:
-                        pass
-                    else:
-                        os.mkdir(PRE_CROP + "{}".format(img_num))
-
-                    if os.path.exists(PRE_CROP_YOLO + "{}".format(img_num)) is True:
-                        pass
-                    else:
-                        os.mkdir(PRE_CROP_YOLO + "{}".format(img_num))
-
-                    if os.path.exists(PRE_YOLO + "{}".format(img_num)) is True:
-                        pass
-                    else:
-                        os.mkdir(PRE_YOLO + "{}".format(img_num))
-
-                    if os.path.exists(PRE_RESIZE + "{}".format(img_num)) is True:
-                        pass
-                    else:
-                        os.mkdir(PRE_RESIZE + "{}".format(img_num))
+                #     if os.path.exists(PRE_CROP + "{}".format(img_num)) is True:
+                #         pass
+                #     else:
+                #         os.mkdir(PRE_CROP + "{}".format(img_num))
+                #
+                #     if os.path.exists(PRE_CROP_YOLO + "{}".format(img_num)) is True:
+                #         pass
+                #     else:
+                #         os.mkdir(PRE_CROP_YOLO + "{}".format(img_num))
+                #
+                #     if os.path.exists(PRE_YOLO + "{}".format(img_num)) is True:
+                #         pass
+                #     else:
+                #         os.mkdir(PRE_YOLO + "{}".format(img_num))
+                #
+                #     if os.path.exists(PRE_RESIZE + "{}".format(img_num)) is True:
+                #         pass
+                #     else:
+                #         os.mkdir(PRE_RESIZE + "{}".format(img_num))
 
                     print("Saving image...")
-                    cv2.imwrite(PRE_CROP + "{}/crop_img_{}.jpg".format(img_num, i), crop_img)
-                    cv2.imwrite(PRE_CROP_YOLO + "{}/crop_yolo_img_{}.jpg".format(img_num, i), crop_yolo_img)
-                    cv2.imwrite(PRE_YOLO + "{}/yolo_img_{}.jpg".format(img_num, i), yolo_img)
-                    cv2.imwrite(PRE_RESIZE + "{}/crop_img_resize_{}.jpg".format(img_num, i), crop_img_resize)
+                    # cv2.imwrite(PRE_CROP + "{}/crop_img_{}.jpg".format(img_num, i), crop_img)
+                    # cv2.imwrite(PRE_CROP_YOLO + "{}/crop_yolo_img_{}.jpg".format(img_num, i), crop_yolo_img)
+                    # cv2.imwrite(PRE_YOLO + "{}/yolo_img_{}.jpg".format(img_num, i), yolo_img)
+                    # cv2.imwrite(PRE_RESIZE + "{}/crop_img_resize_{}.jpg".format(img_num, i), crop_img_resize)
+                    cv2.imwrite(PRE_CROP + "crop_img_{}.jpg".format(msg.step), crop_img)
+                    cv2.imwrite(PRE_CROP_YOLO + "crop_yolo_img_{}.jpg".format(msg.step), crop_yolo_img)
+                    cv2.imwrite(PRE_YOLO + "yolo_img_{}.jpg".format(msg.step), yolo_img)
+                    cv2.imwrite(PRE_RESIZE + "crop_img_resize_{}.jpg".format(msg.step), crop_img_resize)
+
                     print("Displayed save data")
-                    cv2.imshow('color', crop_img)
-                    cv2.waitKey(3000)
-                    cv2.imshow('color', crop_img_resize)
-                    cv2.waitKey(3000)
-                    cv2.destroyAllWindows()
-                    cv2.waitKey(1)
+
+                    #cv2.imshow('Cropped a image from YOLO', crop_img)
+                    #cv2.waitKey(3000)
+                    #cv2.imshow('Resized a image', crop_img_resize)
+                    #cv2.waitKey(3000)
+                    #cv2.destroyAllWindows('Cropped a image from YOLO')
+                    #cv2.destroyAllWindows('Resized a image')
+                    # cv2.waitKey(1)
+
 
                 else:
                     if os.path.exists(SEARCH_CROP + "{}".format(img_num)) is True:

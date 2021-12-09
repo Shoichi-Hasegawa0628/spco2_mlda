@@ -6,11 +6,13 @@
 import sys
 import cv2
 from cv_bridge import CvBridge, CvBridgeError
+import csv
 
 # Third Party
 import rospy
 from std_msgs.msg import String
 import roslib.packages
+import numpy as np
 
 sys.path.append(str(roslib.packages.get_pkg_dir("mlda")) + "/scripts")
 import extract_img_bof
@@ -39,20 +41,23 @@ class ObjectRecognitionYOLO2MLDA():
         self.cv_bridge = CvBridge()
 
 
-    def selection_mode(self, mode):
+    def selection_mode(self, mode, step):
         #mode = rospy.wait_for_message("/object_recog_flag", String, timeout=None)
         # if mode.data == '0': # SpCoSLAM-MLDAの事前学習
 
         if mode == "0":
             print("Taking a picture !")
-            capture_img_func.taking_single_image()
+            capture_img_func.taking_single_image(step)
             print("Sending a image !")
-            success = send_img_func.send_img_to_yolo(mode)
+            success = send_img_func.send_img_to_yolo(mode, step)
+            print(success)
 
             if success is True:
-                return 1
+                return
             else:
-                return 0
+                category_frequency = np.zeros(3)
+                np.savetxt(str(roslib.packages.get_pkg_dir("spco2_mlda")) + "/data/pre_learning/co_frequency/co_frequency_{}.csv".format(step), category_frequency)
+                return
 
             # # 動作確認用
             # count = 0
@@ -71,5 +76,5 @@ if __name__ == "__main__":
     rospy.init_node('object_recognition_yolo2mlda')
     # ObjectRecognitionYOLO2MLDA()
     yolo2mlda = ObjectRecognitionYOLO2MLDA()
-    #yolo2mlda.selection_mode()
+    #yolo2mlda.selection_mode(mode = "0")
     rospy.spin()

@@ -145,7 +145,7 @@ def ReadObjectCategoryFrequency(step):
   #     if row is not None:
   #       object_topic = row
   #       break
-    for line in open(OBJECT_CATEGORY_PATH):
+    for line in open(OBJECT_CATEGORY_PATH + "co_frequency_{}.csv".format(s+1)):
       # for line in open( datasetfolder + datasetname + 'img/ft' + str(s+1) + '.csv', 'r'):
       itemList = line[:].split(',')
       object_topic.append([float(itemList[i]) for i in range(3)])
@@ -1076,15 +1076,11 @@ def callback(message):
     ST_seq   = [[] for i in range(R)]
 
     ###########################修正中
-    flag = yolo2mlda_func.selection_mode(mode = "0")
-
-    if flag == 0:
-      OT = [[0, 0, 0]]
-      #OT.append(ot)
-    else:
-      OT = ReadObjectCategoryFrequency(step)
-      #for i in range(len(OT)):
-      #  OT[i] = int(OT[i])
+    mode = "0"
+    yolo2mlda_func.selection_mode(mode , step)
+    OT = ReadObjectCategoryFrequency(step)
+    #for i in range(len(OT)):
+    #  OT[i] = int(OT[i])
 
     print("OT: {}".format(OT))
     #ot = [0,0,0]
@@ -1218,6 +1214,7 @@ def callback(message):
     ## Publish messeage for start_visualization
     str_msg = 'start_visualization'#std_msgs.msg.String(data= message.data )
     print("Publish!")
+    print("OT: {}".format(OT))
     pub.publish(str_msg)
 
 if __name__ == '__main__':

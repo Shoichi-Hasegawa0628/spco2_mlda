@@ -30,10 +30,10 @@ class CaptureImg():
         # self.image = 0
         #self.taking_multiple_images()
 
-    def taking_single_image(self):
+    def taking_single_image(self, step):
         img = rospy.wait_for_message('/hsrb/head_rgbd_sensor/rgb/image_rect_color/compressed', CompressedImage, timeout=None)
         observed_img = self.rgb_image_ros_to_opencv(img)
-        cv2.imwrite(PRE_OBSERVATION + 'observed_img.jpg', observed_img)
+        cv2.imwrite(PRE_OBSERVATION + 'observed_img_{}.jpg'.format(step), observed_img)
         return
 
     def taking_multiple_images(self):

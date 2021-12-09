@@ -66,7 +66,7 @@ elif CNNmode == 5:
 #パスはUbuntu使用時とWin使用時で変更する必要がある。特にUbuntuで動かすときは絶対パスになっているか要確認。
 #win:相対パス、ubuntu:絶対パス
 datafolder   = "/root/HSR/catkin_ws/src/spco2_mlda/rgiro_spco2_slam/data/output/"        #PATH of data out put folder
-OBJECT_CATEGORY_PATH = str(roslib.packages.get_pkg_dir("spco2_mlda")) + "/data/pre_learning/co_frequency/co_frequency.csv"
+OBJECT_CATEGORY_PATH = str(roslib.packages.get_pkg_dir("spco2_mlda")) + "/data/pre_learning/co_frequency/"
 
 ####################Particle Class (structure)####################
 class Particle:
