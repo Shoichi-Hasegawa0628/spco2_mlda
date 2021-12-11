@@ -61,7 +61,6 @@ you can use `ancestral_sampling_object2place.py`.
 
 
 ## To Do (Japanese)
-- パラメータの追加学習には未対応
 - 絶対パスが含まれている箇所があるため、変更が必要な場合あり
 
 
